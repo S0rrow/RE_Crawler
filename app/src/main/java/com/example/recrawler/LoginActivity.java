@@ -57,7 +57,13 @@ public class LoginActivity extends AppCompatActivity {
         else{
             crawler = new Crawler(id, pw);
             crawler.execute();
-            while(!crawler.done())
+            while(!crawler.done()){
+                try {
+                    wait(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             timeTable = crawler.getTimeTable();
             if(crawler.check()){
                 errorMsg = "SUCCESS!";

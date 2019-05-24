@@ -54,30 +54,33 @@ public class LoginActivity extends AppCompatActivity {
             errorMsg = "ERR:pw not long enough; try again";
             tryLoginBtn.setText(errorMsg);
         }
-        else{
+        else {
             crawler = new Crawler(id, pw);
-            crawler.execute();
-            while(!crawler.done()){
-                try {
-                    wait(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            Thread thread = new Thread() {
+                @Override
+                public void run(){
+                    try{
+                        crawler.crawl();
+                    } catch(Exception e){
+                        e.printStackTrace();
+                    }
                 }
-            }
+            };
+            thread.start();
             timeTable = crawler.getTimeTable();
-            if(crawler.check()){
+            while(!crawler.done()){if(crawler.error != null) break;}
+            if (crawler.check()) {
                 errorMsg = "SUCCESS!";
                 tryLoginBtn.setText(errorMsg);
                 System.out.println("button click test");
-                for(String temp: timeTable){
+                for (String temp : timeTable) {
                     System.out.println(temp);
                 }
                 intent.putStringArrayListExtra("timetable", (ArrayList<String>) timeTable);
                 finish();
                 startActivity(intent);
-            }
-            else{
-                if(crawler.error instanceof IOException) errorMsg = "ERR:id or pw wrong;try again";
+            } else {
+                if (crawler.error != null) errorMsg = "ERR:id or pw wrong;try again";
                 else errorMsg = "ERR:login fail;try again";
                 tryLoginBtn.setText(errorMsg);
             }

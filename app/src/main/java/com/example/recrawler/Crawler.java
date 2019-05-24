@@ -15,15 +15,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-class Crawler extends AsyncTask<Void, Void, Void> {
+class Crawler{
     final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
 
     private String id;
     private String pw;
     private boolean quest;
     private ArrayList<String> timeTableString = new ArrayList<>();
-    IOException error;
-    private boolean threadQuest = true;
+    Exception error;
+    private boolean threadQuest = false;
     Crawler(String input_id, String input_pw){
         super();
         quest = true;
@@ -97,14 +97,16 @@ class Crawler extends AsyncTask<Void, Void, Void> {
             Document main = response.parse();
             Elements el = main.select("a[href='/for_student/course/01.php']");
 
-            Connection.Response timetable = Jsoup.connect(el.first().absUrl("href"))
+            //Connection.Response timetable =
+            Document timetableDoc = Jsoup.connect(el.first().absUrl("href"))
                     .headers(headers)
                     .cookies(cookies)
                     .referrer("https://hisnet.handong.edu/main.php")
                     .userAgent(USER_AGENT)
                     .method(Connection.Method.GET)
-                    .execute();
-            Document timetableDoc = timetable.parse();
+                    .timeout(5000)
+                    .get();
+            //System.out.println(timetableDoc);
             Elements timetableCells = timetableDoc.select("table[id='att_list']").select("td");
             String cache = "";
             String temp = "";
@@ -121,26 +123,11 @@ class Crawler extends AsyncTask<Void, Void, Void> {
                     temp = "";
                 }
             }
-
-            for(String test:timeTableString){
-                System.out.println("cralwer test");
-                System.out.println(test);
-            }
             threadQuest = true;
         } catch (IOException e) {
             quest = false;
             e.printStackTrace();
             error = e;
         }
-    }
-
-    @Override
-    protected Void doInBackground(Void... voids) {
-        try {
-            crawl();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

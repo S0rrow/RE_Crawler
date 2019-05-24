@@ -18,13 +18,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.timetable);
         timetableStirng = getIntent().getStringArrayListExtra("timetable");
-
-        System.out.println("main");
-        System.out.println("main");
-        System.out.println("main");
-        for(String test:timetableStirng){
-            System.out.print(test);
-        }
     }
 
     private void load(){

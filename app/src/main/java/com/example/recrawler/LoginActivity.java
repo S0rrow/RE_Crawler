@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
             errorMsg = "ERR:id null; try again";
             tryLoginBtn.setText(errorMsg);
         }
-        else if(pw.length()<8){
+        else if(pw.length()<6){
             errorMsg = "ERR:pw not long enough; try again";
             tryLoginBtn.setText(errorMsg);
         }

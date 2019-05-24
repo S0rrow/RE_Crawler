@@ -65,7 +65,7 @@ class Crawler extends AsyncTask<Void, Void, Void> {
             headers = new HashMap<String, String>();
             headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
             headers.put("Accept-Encoding", "gzip, deflate, br");
-            headers.put("Accept-Language", "ko-KR");
+            headers.put("Accept-Language", "en-US,en;q=0.8,ko-KR;q=0.9,ko;q=0.7");
             headers.put("Connection", "keep-alive");
             headers.put("Upgrade-Insecure-Requests", "1");
             headers.put("Host", "hisnet.handong.edu");
@@ -83,6 +83,7 @@ class Crawler extends AsyncTask<Void, Void, Void> {
                     .header("Upgrade-Insecure-Requests", "1")
                     .data("id", id)
                     .data("password", pw)
+                    .data("Language", "Korean")
                     .userAgent(USER_AGENT)
                     .method(Connection.Method.POST)
                     .execute();

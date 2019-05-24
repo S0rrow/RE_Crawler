@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RE:Crawler</string>
+    <string name="trylogin">tryLogin</string>
+    <string name="id">ID</string>
+    <string name="pw">Password</string>
+    <string name="nullValue">_null</string>
+</resources>

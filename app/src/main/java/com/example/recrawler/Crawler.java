@@ -129,6 +129,8 @@ class Crawler{
                 temp = TextUtils.join(",",info);
                 if(temp.isEmpty()) temp ="0";
                 timeTableString.add(temp);
+                debug(temp);
+                if(i%7==6) System.out.println();
             }
             threadQuest = true;
         } catch (IOException e) {

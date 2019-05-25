@@ -72,10 +72,13 @@ public class LoginActivity extends AppCompatActivity {
             if (crawler.check()) {
                 errorMsg = "SUCCESS!";
                 tryLoginBtn.setText(errorMsg);
-                System.out.println("button click test");
-                for (String temp : timeTable) {
-                    System.out.println(temp);
-                }
+                //System.out.println("button click test");
+//                for (int i = 0; i < timeTable.size(); i++) {
+//                    System.out.print(timeTable.get(i));
+//                    if(i%7==6) {
+//                        System.out.println();
+//                    }
+//                }
                 intent.putStringArrayListExtra("timetable", (ArrayList<String>) timeTable);
                 finish();
                 startActivity(intent);

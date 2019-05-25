@@ -58,6 +58,7 @@ class Crawler{
             cookies = initialResponse.cookies();
 
             cookies.put("_ga", "GA1.2.1288199000.1544150653");
+            //GA1.2.1288199000.1544150653
             cookies.put("cookie_id", id);
             cookies.put("notice31", "check");
             cookies.put("notice29", "check");
@@ -76,6 +77,8 @@ class Crawler{
                     .select("form[name='login']")
                     .first()
                     .absUrl("action");
+            debug("jsoup connection success, loaded mainframe");
+            debug("loading from id and pw");
             Connection.Response response = Jsoup.connect(loginAction)
                     .cookies(cookies)
                     .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3")
@@ -87,18 +90,27 @@ class Crawler{
                     .userAgent(USER_AGENT)
                     .method(Connection.Method.POST)
                     .execute();
-            response = Jsoup.connect("https://hisnet.handong.edu/for_student/main.php")
+            debug("successfully loaded with cookies and headers!");
+            for(Map.Entry<String, String> entry: response.cookies().entrySet()){
+                System.out.println("response:: key:"+entry.getKey()+"value:"+entry.getValue());
+            }
+            for(Map.Entry<String, String> entry: headers.entrySet()){
+                System.out.println("headers:: key:"+entry.getKey()+"value:"+entry.getValue());
+            }
+
+            Connection.Response response2 = Jsoup.connect("https://hisnet.handong.edu/for_student/main.php")
                     .headers(headers)
-                    .cookies(cookies)
+                    .cookies(response.cookies())
                     .referrer("https://hisnet.handong.edu/main.php")
                     .userAgent(USER_AGENT)
                     .method(Connection.Method.GET)
                     .execute();
-            Document main = response.parse();
-            Elements el = main.select("a[href='/for_student/course/01.php']");
 
-            //Connection.Response timetable =
-            Document timetableDoc = Jsoup.connect(el.first().absUrl("href"))
+            Document main = response2.parse();
+            Elements el = main.select("a[href='/for_student/course/01.php']");
+            debug("response successfully loaded main.php");
+
+            Document timetableDoc = Jsoup.connect("https://hisnet.handong.edu/for_student/course/HLES110M.php")
                     .headers(headers)
                     .cookies(cookies)
                     .referrer("https://hisnet.handong.edu/main.php")
@@ -106,28 +118,23 @@ class Crawler{
                     .method(Connection.Method.GET)
                     .timeout(5000)
                     .get();
-            //System.out.println(timetableDoc);
+            System.out.println("timetable successfully loaded");
             Elements timetableCells = timetableDoc.select("table[id='att_list']").select("td");
             String cache = "";
             String temp = "";
             for(int i = 0; i < timetableCells.size(); i++) {
                 Element cell = timetableCells.get(i);
                 String[] info = cell.text().split("\n");
-                temp = "|"+ TextUtils.join(",",info)+"|";
-                cache = cache+temp;
-                //System.out.print(temp);
-                if(i%7==6) {
-                    timeTableString.add(cache);
-                    //System.out.println();
-                    cache = "";
-                    temp = "";
-                }
+                temp = TextUtils.join(",",info);
+                if(temp.isEmpty()) temp ="0";
+                timeTableString.add(temp);
             }
             threadQuest = true;
         } catch (IOException e) {
             quest = false;
             e.printStackTrace();
             error = e;
+            crawl();
         }
     }
 }

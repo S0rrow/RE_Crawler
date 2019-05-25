@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
         timetableString = getIntent().getStringArrayListExtra("timetable");
 
-        Log.d("yoon","1111");
+        //Log.d("yoon","1111");
         for (int i = 0; i < timetableString.size(); i++) {
             String str = timetableString.get(i);
             //Log.d("yoon", str);
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     }
 
     private void load(){
-        Log.d("yoon","33333");
+        //Log.d("yoon","33333");
         StringBuffer sb = new StringBuffer();
         for(int i = 0; i < newTable.size(); i++){
             String str = newTable.get(i);

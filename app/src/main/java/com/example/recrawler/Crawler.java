@@ -1,6 +1,5 @@
 package com.example.recrawler;
 
-import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import org.jsoup.Connection;
@@ -16,7 +15,7 @@ import java.util.Map;
 
 
 class Crawler{
-    final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
+    private final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
 
     private String id;
     private String pw;
@@ -34,7 +33,7 @@ class Crawler{
     boolean check(){ return quest; }
     boolean done(){return threadQuest;}
 
-    public void debug(String debugString){
+    private void debug(String debugString){
         System.out.println("\nDEBUG:"+debugString);
     }
 
@@ -57,7 +56,7 @@ class Crawler{
                     .execute();
             cookies = initialResponse.cookies();
 
-            cookies.put("_ga", "GA1.2.1288199000.1544150653");
+            //cookies.put("_ga", "GA1.2.1288199000.1544150653");
             //GA1.2.1288199000.1544150653
             cookies.put("cookie_id", id);
             cookies.put("notice31", "check");
@@ -73,6 +72,8 @@ class Crawler{
             Document initialDocument = initialResponse.parse();
 
             String loginAction = Jsoup.connect(initialDocument.selectFirst("frame[name='MainFrame']").absUrl("src"))
+                    .cookies(cookies)
+                    .headers(headers)
                     .get()
                     .select("form[name='login']")
                     .first()

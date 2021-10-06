@@ -39,8 +39,6 @@ class Crawler{
 
     void crawl() throws IOException {
         String url = "http://hisnet.handong.edu";
-        //String id = "jae9hell";
-        //String pw = "legion98";
         Map<String, String> data = new HashMap<String, String>();
         Map<String, String> cookies;
         Map<String, String> headers;
